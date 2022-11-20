@@ -12,6 +12,18 @@
     <div class="container">
         <h4>Productos</h4>
         <div class="row" id="productos"></div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Item</th>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Accion</th>
+                    <th scope="col">Total</th>
+                </tr>
+            </thead>
+            <tbody id="items"></tbody>
+        </table>
     </div>
 
     <template id="template-productos">
@@ -26,6 +38,20 @@
             </div>
         </div>
     </template>
+
+    <template id="template-items">
+        <tr>
+            <th scope="row">Id</th>
+            <td>Titulo</td>
+            <td>Cantidad</td>
+            <td>
+                <button class="btn btn-info btn-sm">+</button>
+                <button class="btn btn-danger btn-sm">-</button>
+            </td>
+            <td>$ <span>500</span></td>
+        </tr>
+    </template>
+
     <script src="api.js"></script>
 </body>
 </html>
