@@ -7,6 +7,9 @@ const templateItems = document.getElementById("template-items").content
 const templateFooter = document.getElementById("template-footer").content
 
 let carrito = {};
+let ap = [];
+let personajes = []
+let precio = 2;
 
 document.addEventListener('DOMContentLoaded', e => {fetchData()})
 document.addEventListener('click', e=>{agregarCarrito(e)})
@@ -15,22 +18,43 @@ items.addEventListener('click', e=>{btnAgregarEliminarProductos(e)})
 
 
 const fetchData = async () => {
-    const res = await fetch('api.json');
+    const res = await fetch('https://rickandmortyapi.com/api/character/');
     const data = await res.json();
-    pintarCards(data);
+    ap = data.results
+
+    /*ap.map((x) =>{
+        let {id, name, image} = x;
+        personajes = [id,name,image,precio];
+        console.log(personajes);
+    })*/
+
+    pintarCards();
 }
 
-const pintarCards = data =>{
-    data.forEach(item =>{
-        templateProductos.querySelector('h5').textContent=item.titulo;
-        templateProductos.querySelector('span').textContent=item.precio;
-        templateProductos.querySelector('img').setAttribute("src", item.imagen)
-        templateProductos.querySelector('button').dataset.id=item.id;
+const pintarCards = () =>{
+    ap.map((item) =>{
+        let {id, name, image} = item;
+        templateProductos.querySelector('h5').textContent=name;
+        templateProductos.querySelector('span').textContent=precio;
+        templateProductos.querySelector('img').setAttribute("src", image)
+        templateProductos.querySelector('button').dataset.id=id;
         const clone = templateProductos.cloneNode(true);
         fragment.appendChild(clone);
     })
     productos.appendChild(fragment);
 }
+
+/*const pintarCards = data =>{
+    data.forEach(item =>{
+        templateProductos.querySelector('h5').textContent=item.name;
+        templateProductos.querySelector('span').textContent=item.id;
+        templateProductos.querySelector('img').setAttribute("src", item.image)
+        templateProductos.querySelector('button').dataset.id=item.id;
+        const clone = templateProductos.cloneNode(true);
+        fragment.appendChild(clone);
+    })
+    productos.appendChild(fragment);
+}*/
 
 const agregarCarrito = e =>{
     if(e.target.classList.contains('btn-dark')){
