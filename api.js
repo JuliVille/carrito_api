@@ -1,4 +1,6 @@
 const productos = document.getElementById("productos");
+const eliminarC = document.getElementById("eliminar");
+const agregar = document.getElementById("agregar");
 const items = document.getElementById("items");
 const footer = document.getElementById("footer");
 const fragment = document.createDocumentFragment();
@@ -6,55 +8,110 @@ const templateProductos = document.getElementById("template-productos").content
 const templateItems = document.getElementById("template-items").content
 const templateFooter = document.getElementById("template-footer").content
 
-let carrito = {};
-let ap = [];
-let personajes = []
-let precio = 2;
+const carrito = {};
+const personajes = [];
+let person = {};
+let ap = []
 
 document.addEventListener('DOMContentLoaded', e => {fetchData()})
 document.addEventListener('click', e=>{agregarCarrito(e)})
+document.addEventListener('click', e=>{eliminarCards(e)})
+document.addEventListener('click', e=>{editarCards(e)})
+
+agregar.addEventListener('click', ()=>{agregarCards()})
 
 items.addEventListener('click', e=>{btnAgregarEliminarProductos(e)})
-
 
 const fetchData = async () => {
     const res = await fetch('https://rickandmortyapi.com/api/character/');
     const data = await res.json();
     ap = data.results
-
-    /*ap.map((x) =>{
-        let {id, name, image} = x;
-        personajes = [id,name,image,precio];
-        console.log(personajes);
-    })*/
-
+    mapearPersonajes()
     pintarCards();
 }
 
-const pintarCards = () =>{
-    ap.map((item) =>{
-        let {id, name, image} = item;
-        templateProductos.querySelector('h5').textContent=name;
-        templateProductos.querySelector('span').textContent=precio;
-        templateProductos.querySelector('img').setAttribute("src", image)
-        templateProductos.querySelector('button').dataset.id=id;
-        const clone = templateProductos.cloneNode(true);
-        fragment.appendChild(clone);
-    })
-    productos.appendChild(fragment);
+function ramdom(max) {
+    return Math.floor(Math.random() * max);
 }
 
-/*const pintarCards = data =>{
-    data.forEach(item =>{
+
+function mapearPersonajes(){
+    ap.forEach((item) =>{
+        const precio = ramdom(200);
+        let {id, name, image} = item;
+        person = {"id":id, "name":name, "image":image, "precio":precio};
+        personajes.push(person);
+    })
+}
+
+const pintarCards = () =>{
+    personajes.forEach(item =>{
         templateProductos.querySelector('h5').textContent=item.name;
-        templateProductos.querySelector('span').textContent=item.id;
+        templateProductos.querySelector('span').textContent=item.precio;
         templateProductos.querySelector('img').setAttribute("src", item.image)
         templateProductos.querySelector('button').dataset.id=item.id;
         const clone = templateProductos.cloneNode(true);
         fragment.appendChild(clone);
     })
     productos.appendChild(fragment);
-}*/
+}
+
+const agregarCards = () =>{
+    const idP = document.getElementById("idP").value;
+    const nombre = document.getElementById("nombre").value;
+    const imagen = document.getElementById("imagen").value;
+    const precio = document.getElementById("precio").value;
+
+    const agregar = {
+        id: parseInt(idP),
+        name: nombre,
+        image: imagen,
+        precio: parseInt(precio)
+    }
+    personajes.push(agregar);
+    productos.innerHTML="";
+    pintarCards();
+    limpiar();
+}
+
+
+const editarCards = (e) =>{
+    if(e.target.classList.contains('btn-primary')){
+        document.getElementById("nombre").value = e.target.parentElement.children[0].textContent ;
+        document.getElementById("precio").value = e.target.parentElement.children[1].children[0].textContent;
+        document.getElementById("idP").value = e.target.parentElement.children[2].dataset.id;
+        document.getElementById("imagen").value = e.target.parentElement.parentElement.children[0].getAttribute("src");
+        console.log(personajes)
+
+        /*nombre = e.target.parentElement.children[0].textContent = document.getElementById("nombre");
+        precio = e.target.parentElement.children[1].children[0].textContent = document.getElementById("precio");
+        idp = e.target.parentElement.children[2].dataset.id = document.getElementById("idP");
+        imagen = e.target.parentElement.parentElement.children[0].getAttribute("src") = document.getElementById("imagen");*/
+        
+    }
+}
+
+const limpiar = () =>{
+    document.getElementById("idP").value = "";
+    document.getElementById("nombre").value = "";
+    document.getElementById("imagen").value = "";
+    document.getElementById("precio").value = 0;
+
+}
+
+const eliminarCards = e =>{
+    if(e.target.classList.contains('eliminar')){
+        if(personajes.length>0){
+            idP = e.target.parentElement.children[2].dataset.id;
+            productos.innerHTML = ""
+            delete personajes[parseInt(idP)-1];
+        }
+            pintarCards()
+        }
+    
+    e.stopPropagation();
+}
+
 
 const agregarCarrito = e =>{
     if(e.target.classList.contains('btn-dark')){
@@ -142,3 +199,4 @@ const btnAgregarEliminarProductos = e =>{
         pintarProductos();
     }
 }
+
