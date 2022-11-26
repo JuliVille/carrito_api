@@ -158,7 +158,6 @@ const eliminarCards = e =>{
     if(e.target.classList.contains('eliminar')){
             idP = e.target.parentElement.children[2].dataset.id;
                 productos.innerHTML = ""
-                console.log(productos)
                 delete personajes[parseInt(idP)-1];
         pintarCards()
     }
