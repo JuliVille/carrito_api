@@ -8,39 +8,37 @@ const templateProductos = document.getElementById("template-productos").content
 const templateItems = document.getElementById("template-items").content
 const templateFooter = document.getElementById("template-footer").content
 
-const carrito = {};
-const personajes = [];
-let person = {};
-let ap = []
-
 document.addEventListener('DOMContentLoaded', e => {fetchData()})
 document.addEventListener('click', e=>{agregarCarrito(e)})
 document.addEventListener('click', e=>{eliminarCards(e)})
-document.addEventListener('click', e=>{editarCards(e)})
 
-agregar.addEventListener('click', ()=>{agregarCards()})
+agregar.addEventListener('click', (e)=>{agregarCards(e)})
+//document.addEventListener('click', (e)=>{editarCards(e)})
+
+let carrito = {};
+let personajes = [];
+let api = [];
 
 items.addEventListener('click', e=>{btnAgregarEliminarProductos(e)})
 
 const fetchData = async () => {
     const res = await fetch('https://rickandmortyapi.com/api/character/');
     const data = await res.json();
-    ap = data.results
+    api = data.results;
     mapearPersonajes()
-    pintarCards();
+    pintarCards()
 }
 
 function ramdom(max) {
     return Math.floor(Math.random() * max);
 }
 
-
 function mapearPersonajes(){
-    ap.forEach((item) =>{
+    api.forEach((item) =>{
         const precio = ramdom(200);
         let {id, name, image} = item;
-        person = {"id":id, "name":name, "image":image, "precio":precio};
-        personajes.push(person);
+        const a = {"id":id, "name":name, "image":image, "precio":precio};
+        personajes.push(a);
     })
 }
 
@@ -54,9 +52,10 @@ const pintarCards = () =>{
         fragment.appendChild(clone);
     })
     productos.appendChild(fragment);
+    console.log(personajes)
 }
 
-const agregarCards = () =>{
+const agregarCards = (e) =>{
     const idP = document.getElementById("idP").value;
     const nombre = document.getElementById("nombre").value;
     const imagen = document.getElementById("imagen").value;
@@ -68,48 +67,48 @@ const agregarCards = () =>{
         image: imagen,
         precio: parseInt(precio)
     }
-    personajes.push(agregar);
-    productos.innerHTML="";
-    pintarCards();
-    limpiar();
+        
+        personajes.push(agregar);
+        productos.innerHTML="";
+        pintarCards();
+        console.log(personajes)
+        limpiar();
 }
 
 
 const editarCards = (e) =>{
     if(e.target.classList.contains('btn-primary')){
-        document.getElementById("nombre").value = e.target.parentElement.children[0].textContent ;
-        document.getElementById("precio").value = e.target.parentElement.children[1].children[0].textContent;
-        document.getElementById("idP").value = e.target.parentElement.children[2].dataset.id;
-        document.getElementById("imagen").value = e.target.parentElement.parentElement.children[0].getAttribute("src");
-        console.log(personajes)
-
-        /*nombre = e.target.parentElement.children[0].textContent = document.getElementById("nombre");
-        precio = e.target.parentElement.children[1].children[0].textContent = document.getElementById("precio");
-        idp = e.target.parentElement.children[2].dataset.id = document.getElementById("idP");
-        imagen = e.target.parentElement.parentElement.children[0].getAttribute("src") = document.getElementById("imagen");*/
-        
+        const nombre = document.getElementById("nombre").value = e.target.parentElement.children[0].textContent;
+        const precio = document.getElementById("precio").value = e.target.parentElement.children[1].children[0].textContent;
+        const id =document.getElementById("idP").value = e.target.parentElement.children[2].dataset.id;
+        const imagen = document.getElementById("imagen").value = e.target.parentElement.parentElement.children[0].getAttribute("src");
+        console.log(nombre,precio,id,imagen)
     }
+    /*  personajes[parseInt(id)-1].id = "2"
+        personajes[parseInt(id)-1].name = "dasa"
+        personajes[parseInt(id)-1].image = "https://rickandmortyapi.com/api/character/avatar/2.jpeg"
+        personajes[parseInt(id)-1].precio = "22"*/
+    productos.innerHTML="";
+    pintarCards();
 }
 
 const limpiar = () =>{
     document.getElementById("idP").value = "";
     document.getElementById("nombre").value = "";
     document.getElementById("imagen").value = "";
-    document.getElementById("precio").value = 0;
+    document.getElementById("precio").value = "";
 
 }
 
 const eliminarCards = e =>{
     if(e.target.classList.contains('eliminar')){
-        if(personajes.length>0){
             idP = e.target.parentElement.children[2].dataset.id;
-            productos.innerHTML = ""
-            delete personajes[parseInt(idP)-1];
-        }
-            pintarCards()
-        }
-    
-    e.stopPropagation();
+            personajes.forEach(item =>{
+                productos.innerHTML = ""
+                delete personajes[parseInt(idP)-1];
+            })
+        pintarCards()
+    }
 }
 
 

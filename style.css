@@ -1,0 +1,38 @@
+body{
+    background-image: url('https://img.freepik.com/foto-gratis/fondo-elegante-vacio-espacio-copia_24972-1807.jpg?w=1060&t=st=1669427374~exp=1669427974~hmac=50f96f7a34049c9d8bcadf8af81abed1331406d7752070e67d8c17f2a21b965e')
+}
+
+h4{
+    text-align: center;
+}
+
+h5{
+    font-size: 19px
+}
+
+.mt-5{
+    border: 1px solid black;
+}
+
+.card-img-top{
+    min-width: 100px;
+    max-width: 200px;
+    min-height: 200px;
+    max-height: 200px;
+}
+
+.card button{
+    width: 170px;
+    margin-top: 2px;
+}
+
+.card-body h5{
+    text-align: center;
+    max-height: 20px;
+}
+
+.card-body p{
+    text-align: center;
+    max-height: 40px;
+    margin-top: 30px;
+}
