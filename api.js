@@ -2,6 +2,7 @@ const productos = document.getElementById("productos");
 const eliminarC = document.getElementById("eliminar");
 const agregar = document.getElementById("agregar");
 const editar = document.getElementById("editar");
+const error = document.getElementById("error");
 const items = document.getElementById("items");
 const footer = document.getElementById("footer");
 const fragment = document.createDocumentFragment();
@@ -59,23 +60,42 @@ const pintarCards = () =>{
 }
 
 const agregarCards = (e) =>{
-    idP++;
     const nombre = document.getElementById("nombre").value;
     const imagen = document.getElementById("imagen").value;
     const precio = document.getElementById("precio").value;
 
-    const agregar = {
-        id: parseInt(idP),
-        name: nombre,
-        image: imagen,
-        precio: parseInt(precio)
-    }        
-    personajes.push(agregar);
-    productos.innerHTML="";
-    pintarCards();
-    console.log(personajes)
-    limpiar();
-    editar.style.display= 'none';
+    let mensaje = [];
+
+    if(nombre.length == 0){
+        mensaje.push("Digite el nombre")
+    }
+
+    if(precio.length == 0){
+        mensaje.push("Digite un precio")
+    }
+
+    if(imagen.length == 0){
+        mensaje.push("Coloque una imagen")
+    }
+
+
+    error.innerHTML = mensaje.join(', ')    
+
+    if(mensaje.length==0){
+        idP++;
+        const agregar = {
+            id: parseInt(idP),
+            name: nombre,
+            image: imagen,
+            precio: parseInt(precio)
+        }        
+        personajes.push(agregar);
+        productos.innerHTML="";
+        pintarCards();
+        console.log(personajes)
+        limpiar();
+        editar.style.display= 'none';
+    }
 }
 
 
@@ -84,7 +104,7 @@ const editarC = (e) =>{
         document.getElementById("nombre").value = e.target.parentElement.children[0].textContent;
         document.getElementById("precio").value = e.target.parentElement.children[1].children[0].textContent;
         document.getElementById("idP").value = e.target.parentElement.children[2].dataset.id;
-        document.getElementById("imagen").value = e.target.parentElement.parentElement.children[0].getAttribute("src");
+        document.getElementById("imagen").value = e.target.parentElement.parentElement.children[0].getAttribute("src");  
         agregar.style.display= 'none';
         editar.style.display= 'block';
     }
@@ -95,16 +115,35 @@ const editarCards = (e) =>{
         const idP = document.getElementById("idP").value;
         const imagen = document.getElementById("imagen").value;
         const precio = document.getElementById("precio").value;
-        personajes[parseInt(idP)-1].id = idP
-        personajes[parseInt(idP)-1].name = nombre
-        personajes[parseInt(idP)-1].image = imagen
-        personajes[parseInt(idP)-1].precio = precio
-        console.log(idP + nombre + imagen + precio);
-        productos.innerHTML="";
-        pintarCards();
-        agregar.style.display= 'block';
-        editar.style.display= 'none';
-        limpiar();
+
+        let mensaje = [];
+
+        if(nombre.length == 0){
+            mensaje.push("Digite el nombre")
+        }
+
+        if(precio.length == 0){
+            mensaje.push("Digite un precio")
+        }
+
+        if(imagen.length == 0){
+            mensaje.push("Coloque una imagen")
+        }
+
+        error.innerHTML = mensaje.join(', ')
+
+        if(mensaje.length==0){
+            personajes[parseInt(idP)-1].id = idP
+            personajes[parseInt(idP)-1].name = nombre
+            personajes[parseInt(idP)-1].image = imagen
+            personajes[parseInt(idP)-1].precio = precio
+            console.log(idP + nombre + imagen + precio);
+            productos.innerHTML="";
+            pintarCards();
+            agregar.style.display= 'block';
+            editar.style.display= 'none';
+            limpiar();
+        } 
 }
 
 const limpiar = () =>{

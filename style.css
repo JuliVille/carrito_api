@@ -46,3 +46,8 @@ h5{
     background-color: purple;
     color: white;
 }
+
+#error{
+    color: red;
+    font-size: 20px;
+}
