@@ -1,6 +1,7 @@
 const productos = document.getElementById("productos");
 const eliminarC = document.getElementById("eliminar");
 const agregar = document.getElementById("agregar");
+const editar = document.getElementById("editar");
 const items = document.getElementById("items");
 const footer = document.getElementById("footer");
 const fragment = document.createDocumentFragment();
@@ -11,13 +12,15 @@ const templateFooter = document.getElementById("template-footer").content
 document.addEventListener('DOMContentLoaded', e => {fetchData()})
 document.addEventListener('click', e=>{agregarCarrito(e)})
 document.addEventListener('click', e=>{eliminarCards(e)})
+document.addEventListener('click', (e)=>{editarC(e)})
 
 agregar.addEventListener('click', (e)=>{agregarCards(e)})
-//document.addEventListener('click', (e)=>{editarCards(e)})
+editar.addEventListener('click', (e)=>{editarCards(e)})
 
 let carrito = {};
 let personajes = [];
 let api = [];
+let idP = 20;
 
 items.addEventListener('click', e=>{btnAgregarEliminarProductos(e)})
 
@@ -56,7 +59,7 @@ const pintarCards = () =>{
 }
 
 const agregarCards = (e) =>{
-    const idP = document.getElementById("idP").value;
+    idP++;
     const nombre = document.getElementById("nombre").value;
     const imagen = document.getElementById("imagen").value;
     const precio = document.getElementById("precio").value;
@@ -66,30 +69,42 @@ const agregarCards = (e) =>{
         name: nombre,
         image: imagen,
         precio: parseInt(precio)
-    }
-        
-        personajes.push(agregar);
-        productos.innerHTML="";
-        pintarCards();
-        console.log(personajes)
-        limpiar();
+    }        
+    personajes.push(agregar);
+    productos.innerHTML="";
+    pintarCards();
+    console.log(personajes)
+    limpiar();
+    editar.style.display= 'none';
 }
 
 
-const editarCards = (e) =>{
+const editarC = (e) =>{
     if(e.target.classList.contains('btn-primary')){
-        const nombre = document.getElementById("nombre").value = e.target.parentElement.children[0].textContent;
-        const precio = document.getElementById("precio").value = e.target.parentElement.children[1].children[0].textContent;
-        const id =document.getElementById("idP").value = e.target.parentElement.children[2].dataset.id;
-        const imagen = document.getElementById("imagen").value = e.target.parentElement.parentElement.children[0].getAttribute("src");
-        console.log(nombre,precio,id,imagen)
+        document.getElementById("nombre").value = e.target.parentElement.children[0].textContent;
+        document.getElementById("precio").value = e.target.parentElement.children[1].children[0].textContent;
+        document.getElementById("idP").value = e.target.parentElement.children[2].dataset.id;
+        document.getElementById("imagen").value = e.target.parentElement.parentElement.children[0].getAttribute("src");
+        agregar.style.display= 'none';
+        editar.style.display= 'block';
     }
-    /*  personajes[parseInt(id)-1].id = "2"
-        personajes[parseInt(id)-1].name = "dasa"
-        personajes[parseInt(id)-1].image = "https://rickandmortyapi.com/api/character/avatar/2.jpeg"
-        personajes[parseInt(id)-1].precio = "22"*/
-    productos.innerHTML="";
-    pintarCards();
+}
+
+const editarCards = (e) =>{
+        const nombre = document.getElementById("nombre").value;
+        const idP = document.getElementById("idP").value;
+        const imagen = document.getElementById("imagen").value;
+        const precio = document.getElementById("precio").value;
+        personajes[parseInt(idP)-1].id = idP
+        personajes[parseInt(idP)-1].name = nombre
+        personajes[parseInt(idP)-1].image = imagen
+        personajes[parseInt(idP)-1].precio = precio
+        console.log(idP + nombre + imagen + precio);
+        productos.innerHTML="";
+        pintarCards();
+        agregar.style.display= 'block';
+        editar.style.display= 'none';
+        limpiar();
 }
 
 const limpiar = () =>{
@@ -103,10 +118,9 @@ const limpiar = () =>{
 const eliminarCards = e =>{
     if(e.target.classList.contains('eliminar')){
             idP = e.target.parentElement.children[2].dataset.id;
-            personajes.forEach(item =>{
                 productos.innerHTML = ""
+                console.log(productos)
                 delete personajes[parseInt(idP)-1];
-            })
         pintarCards()
     }
 }
