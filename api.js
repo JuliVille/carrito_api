@@ -156,9 +156,9 @@ const limpiar = () =>{
 
 const eliminarCards = e =>{
     if(e.target.classList.contains('eliminar')){
-            idP = e.target.parentElement.children[2].dataset.id;
+            const i = e.target.parentElement.children[2].dataset.id;
                 productos.innerHTML = ""
-                delete personajes[parseInt(idP)-1];
+                delete personajes[parseInt(i)-1];
         pintarCards()
     }
 }
